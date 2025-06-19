@@ -63,6 +63,7 @@ def notify_comment_mention(comment_body: str, context_obj):
 
 # === Event dispatch ===
 
+print(f"Event Name: {event_name}, Action: {event_action}")
 # 1. Valid assignment events
 if event_name == "issues" and event_action in ["opened", "assigned"]:
     notify_assignment(event["issue"])
