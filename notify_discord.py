@@ -64,12 +64,8 @@ def notify_comment_mention(comment_body: str, context_obj):
 # === Event dispatch ===
 
 # 1. Valid assignment events
-print(f"Event Name: {event_name}, Action: {event_action}")
 if event_name == "issues" and event_action in ["opened", "assigned"]:
     notify_assignment(event["issue"])
-
-elif event_name == "pull_request" and event_action in ["opened", "assigned"]:
-    notify_assignment(event["pull_request"])
 
 # 2. Valid comment events with possible @mentions
 elif (
