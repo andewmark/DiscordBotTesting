@@ -62,6 +62,27 @@ def notify_review_request(pr_obj):
         )
         post_to_discord(message)
 
+# Notify review state changes to the assignee
+def notify_review_state_change(pr_obj, state: str):
+    title = pr_obj.get("title", "Untitled")
+    url = pr_obj.get("html_url", "")
+    assignees = pr_obj.get("assignee", {})
+
+    
+    mentions = [
+        f"<@{user_map[user['login']]}>"
+        for user in assignees
+        if user["login"] in user_map
+    ]
+    if mentions:
+        message = (
+            f"🔔 **PR Review State Change**\n"
+            f"🔗 [{title}]({url})\n"
+            f"🔄 State: {state}\n"
+            f"👤 Assigned to: {', '.join(mentions)}"
+        )
+        post_to_discord(message)
+
 def notify_comment_mention(comment_body: str, context_obj):
     mentioned_users = re.findall(r"@(\w+)", comment_body)
 
@@ -87,10 +108,18 @@ if event_name == "issues" and event_action in ["opened", "assigned"]:
     notify_assignment(event["issue"])
 
 # 2. Valid review request events
-elif event_name == "pull_request" and event_action in ["review_requested", "review_requested"]:
+elif event_name == "pull_request" and event_action in ["review_requested"]:
     notify_review_request(event["pull_request"])
 
-# 3. Valid comment events with possible @mentions
+# 3. Valid request review events
+elif event_name == "pull_request_review" and event_action in ["submitted"]:
+    state = event["pull_request_review"].get("state")
+    if state == "approved":
+        notify_review_state_change(event["pull_request"], "approved")
+    elif state == "changes_requested":
+        notify_review_state_change(event["pull_request"], "changes requested")   
+
+# 4. Valid comment events with possible @mentions
 elif (
     event_name in ["issue_comment", "pull_request_review_comment"]
     and "comment" in event
@@ -98,5 +127,3 @@ elif (
     comment_body = event["comment"]["body"]
     context_obj = event.get("issue") or event.get("pull_request", {})
     notify_comment_mention(comment_body, context_obj)
-
-# testing pull requests
