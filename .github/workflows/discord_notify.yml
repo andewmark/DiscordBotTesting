@@ -2,7 +2,7 @@ name: Notify Discord on Assignments or Mentions
 
 on:
   issues:
-    types: [opened, assigned]
+    types: [assigned]
   pull_request:
     types: [opened, review_requested]
   issue_comment:
