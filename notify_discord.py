@@ -69,11 +69,11 @@ def notify_review_state_change(pr_obj, state: str):
     assignees = pr_obj.get("assignee", {})
 
     
-    mentions = [
-        f"<@{user_map[user['login']]}>"
-        for user in assignees
-        if user["login"] in user_map
-    ]
+    # mentions = [
+    #     f"<@{user_map[user['login']]}>"
+    #     for user in assignees
+    #     if user["login"] in user_map
+    # ]
     # if mentions:
     message = (
         f"🔔 **PR Review State Change**\n"
