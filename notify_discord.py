@@ -99,7 +99,6 @@ def notify_comment_mention(comment_body: str, context_obj):
         )
         post_to_discord(message)
 
-
 # === Event dispatch ===
 
 print(f"Event Name: {event_name}, Action: {event_action}")
