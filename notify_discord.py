@@ -106,6 +106,7 @@ elif event_name == "pull_request" and event_action in ["review_requested"]:
 # 3. Valid request review events
 elif event_name == "pull_request_review" and event_action in ["submitted"]:
     state = event["review"].get("state")
+    print(f"Review state: {state}")
     if state == "approved":
         notify_review_state_change(event["pull_request"], "approved")
     elif state == "changes_requested":
