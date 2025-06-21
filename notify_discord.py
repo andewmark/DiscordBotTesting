@@ -67,7 +67,7 @@ def notify_review_state_change(pr_obj, state: str):
     url = pr_obj.get("html_url", "")
     assignee = pr_obj.get("assignee", {})
     
-    mentioned_assignee = f"<@{user_map[assignee['login']]}"
+    mentioned_assignee = f"<@{user_map[assignee['login']]}>"
 
     message = (
         f"🔔 **PR Review State Change**\n"
