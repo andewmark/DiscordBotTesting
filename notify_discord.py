@@ -69,19 +69,19 @@ def notify_review_state_change(pr_obj, state: str):
     assignees = pr_obj.get("assignee", {})
 
     
-    # mentions = [
-    #     f"<@{user_map[user['login']]}>"
-    #     for user in assignees
-    #     if user["login"] in user_map
-    # ]
-    # if mentions:
-    message = (
-        f"🔔 **PR Review State Change**\n"
-        f"🔗 [{title}]({url})\n"
-        f"🔄 State: {state}\n"
-        # f"👤 Assigned to: {', '.join(mentions)}"
-    )
-    post_to_discord(message)
+    mentions = [
+        f"<@{user_map[user['login']]}>"
+        for user in assignees
+        if user["login"] in user_map
+    ]
+    if mentions:
+        message = (
+            f"🔔 **PR Review State Change**\n"
+            f"🔗 [{title}]({url})\n"
+            f"🔄 State: {state}\n"
+            f"👤 Assigned to: {', '.join(mentions)}"
+        )
+        post_to_discord(message)
 
 def notify_comment_mention(comment_body: str, context_obj):
     mentioned_users = re.findall(r"@(\w+)", comment_body)
