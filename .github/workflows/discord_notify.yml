@@ -24,6 +24,10 @@ jobs:
 
       - name: Install dependencies
         run: pip install requests
+      
+      - name: Decode user_map.json from secret
+        run: |
+          echo "${{ secrets.USER_MAP }}" | base64 --decode > user_map.json
 
       - name: Run notification script
         run: python notify_discord.py
